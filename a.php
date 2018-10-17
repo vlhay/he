@@ -31,7 +31,7 @@ $lay = explode("<i class='fa fa-tag fa-lg'></i>",$lay[1]);
 
 
 $lay = trim($lay[0]);
-$lay = strip_tags($lay,'<img></iframe>');
+$lay = strip_tags($lay,'<img><iframe>');
 $thum = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is',"<option>$2</option>",$lay);
 $lay =  str_replace('GaiXinhXinh.Com','CuocSong.ViWap.Com' ,$lay);
 $lay =  str_replace('<p>','[p]' ,$lay);
