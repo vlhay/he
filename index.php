@@ -1,251 +1,153 @@
 <?php
+/**
+ * 
+ * This software is distributed under the GNU GPL v3.0 license.
+ * @author Gemorroj
+ * @copyright 2008-2012 http://wapinet.ru
+ * @license http://www.gnu.org/licenses/gpl-3.0.txt
+ * @link http://wapinet.ru/gmanager/
+ * @version 0.8.1 beta
+ * 
+ * PHP version >= 5.2.3
+ * 
+ */
 
-    define('ACCESS', true);
-    define('INDEX', true);
 
-    include_once 'function.php';
+require 'bootstrap.php';
 
-    if (IS_LOGIN) {
-        $title = !IS_INSTALL_ROOT_DIRECTORY ? 'Danh sách' : 'Lỗi File Manager';
-        $dir = NOT_PERMISSION == false && isset($_GET['dir']) && empty($_GET['dir']) == false ? rawurldecode($_GET['dir']) : $_SERVER['DOCUMENT_ROOT'];
-        $dir = processDirectory($dir);
-        $handler = null;
 
-        include_once 'header.php';
+if (Registry::get('current') == '.') {
+    Registry::set('current', Gmanager::getInstance()->getcwd() . '/');
+    Registry::set('hCurrent', htmlspecialchars(Gmanager::getInstance()->getcwd(), ENT_COMPAT) . '/');
+    Registry::set('rCurrent', Helper_View::getRawurl(Gmanager::getInstance()->getcwd()));
+}
 
-        if (!IS_INSTALL_ROOT_DIRECTORY) {
-            $handler = @scandir($dir);
 
-            if ($handler === false) {
-                $dir = $_SERVER['DOCUMENT_ROOT'];
-                $dir = processDirectory($dir);
+if (Registry::get('currentType') == 'dir') {
+    $archive = null;
+} else {
+    $archive = Helper_Archive::isArchive(Helper_System::getType(Helper_System::basename(Registry::get('current'))));
+}
 
-                $handler = @scandir($dir);
-            }
-        }
+$f = 0;
+$if = isset($_GET['f']);
+$ia = isset($_GET['add_archive']);
 
-        if (!is_array($handler))
-            $handler = array();
+Gmanager::getInstance()->sendHeader();
 
-        $dirEncode = rawurlencode($dir);
-        $count = count($handler);
-        $lists = array();
+echo str_replace('%title%', Registry::get('hCurrent'), Registry::get('top')) . '<div class="w2">' . Language::get('title_index') . '<br/></div>' . Gmanager::getInstance()->head() . Gmanager::getInstance()->langJS();
 
-        if (!IS_INSTALL_ROOT_DIRECTORY && $count > 0) {
-            $folders = array();
-            $files = array();
 
-            foreach ($handler AS $entry) {
-                if ($entry != '.' && $entry != '..') {
-                    if ($entry == DIRECTORY_FILE_MANAGER && IS_ACCESS_PARENT_PATH_FILE_MANAGER);
-                        /* Is hide directory File Manager */
-                    else if (is_dir($dir . '/' . $entry))
-                        $folders[] = $entry;
-                    else
-                        $files[] = $entry;
-                }
-            }
-
-            if (count($folders) > 0) {
-                asort($folders);
-
-                foreach ($folders AS $entry)
-                    $lists[] = array('name' => $entry, 'is_directory' => true);
-            }
-
-            if (count($files) > 0) {
-                asort($files);
-
-                foreach ($files AS $entry)
-                    $lists[] = array('name' => $entry, 'is_directory' => false);
-            }
-        }
-
-        $count = count($lists);
-        $html = null;
-
-        if (!IS_INSTALL_ROOT_DIRECTORY && $dir != '/' && strpos($dir, '/') !== false) {
-            $array = explode('/', preg_replace('|^/(.*?)$|', '\1', $dir));
-            $html = null;
-            $item = null;
-            $url = null;
-
-            foreach ($array AS $key => $entry) {
-                if ($key === 0) {
-                    $seperator = preg_match('|^\/(.*?)$|', $dir) ? '/' : null;
-                    $item = $seperator . $entry;
-                } else {
-                    $item = '/' . $entry;
-                }
-
-                if ($key < count($array) - 1)
-                    $html .= '/<a href="index.php?dir=' . rawurlencode($url . $item) . '">';
-                else
-                    $html .= '/';
-
-                $url .= $item;
-                $html .= substring($entry, 0, NAME_SUBSTR, NAME_SUBSTR_ELLIPSIS);
-
-                if ($key < count($array) - 1)
-                    $html .= '</a>';
-            }
-        }
-
-        if (!IS_INSTALL_ROOT_DIRECTORY) {
-            echo '<script language="javascript" src="checkbox.js"></script>';
-            echo '<div class="title">' . $html . '</div>';
-        }
-
-        if (NOT_PERMISSION) {
-            if (IS_INSTALL_ROOT_DIRECTORY) {
-                echo '<div class="title">Lỗi File Manager</div>
-                <div class="list">Bạn đang cài đặt File Manager trên thư mục gốc, hãy chuyển vào một thư mục</div>';
-            } else if (IS_ACCESS_FILE_IN_FILE_MANAGER) {
-                echo '<div class="notice_info">Bạn không thể xem tập tin của File Manager nó đã bị chặn</div>';
-            } else {
-                echo '<div class="notice_info">Bạn không thể xem thư mục của File Manager nó đã bị chặn</div>';
-            }
-        }
-
-        if (!IS_INSTALL_ROOT_DIRECTORY) {
-            echo '<form action="action.php?dir=' . $dirEncode . $pages['paramater_1'] . '" method="post" name="form"><ul class="list_file">';
-
-            if (preg_replace('|[a-zA-Z]+:|', '', str_replace('\\', '/', $dir)) != '/') {
-                $path = strrchr($dir, '/');
-
-                if ($path !== false)
-                    $path = 'index.php?dir=' . rawurlencode(substr($dir, 0, strlen($dir) - strlen($path)));
-                else
-                    $path = 'index.php';
-
-                echo '<li class="normal">
-                    <img src="icon/back.png" style="margin-left: 5px; margin-right: 5px"/> 
-                    <a href="' . $path . '">
-                        <strong class="back">...</strong>
-                    </a>
-                </li>';
-            }
-
-            if ($count <= 0) {
-                echo '<li class="normal"><img src="icon/empty.png"/> <span class="empty">Không có thư mục hoặc tập tin</span></li>';
-            } else {
-                $start = 0;
-                $end = $count;
-
-                if ($configs['page_list'] > 0 && $count > $configs['page_list']) {
-                    $pages['total'] = ceil($count / $configs['page_list']);
-
-                    if ($pages['total'] <= 0 || $pages['current'] > $pages['total'])
-                        goURL('index.php?dir=' . $dirEncode . ($pages['total'] <= 0 ? null : '&page_list=' . $pages['total']));
-
-                    $start = ($pages['current'] * $configs['page_list']) - $configs['page_list'];
-                    $end = $start + $configs['page_list'] >= $count ? $count : $start + $configs['page_list'];
-                }
-
-                for ($i = $start; $i < $end; ++$i) {
-                    $name = $lists[$i]['name'];
-                    $path = $dir . '/' . $name;
-                    $perms = getChmod($path);
-
-                    if ($lists[$i]['is_directory']) {
-                        echo '<li class="folder">
-                            <div>
-                                <input type="checkbox" name="entry[]" value="' . $name . '"/>
-                                <a href="folder_edit.php?dir=' . $dirEncode .'&name=' . $name . $pages['paramater_1'] . '">
-                                    <img src="icon/folder.png"/>
-                                </a>
-                                <a href="index.php?dir=' . rawurlencode($path) . '">' . $name . '</a>
-                                <div class="perms">
-                                    <a href="folder_chmod.php?dir=' . $dirEncode .'&name=' . $name . $pages['paramater_1'] . '" class="chmod">' . $perms . '</a>
-                                </div>
-                            </div>
-                        </li>';
-                    } else {
-                        $edit = array(null, '</a>');
-                        $icon = 'unknown';
-                        $type = getFormat($name);
-                        $isEdit = false;
-
-                        if (in_array($type, $formats['other'])) {
-                            $icon = $type;
-                        } else if (in_array($type, $formats['text'])) {
-                            $icon = $type;
-                            $isEdit = true;
-                        } else if (in_array($type, $formats['archive'])) {
-                            $icon = $type;
-                        } else if (in_array($type, $formats['audio'])) {
-                            $icon = $type;
-                        } else if (in_array($type, $formats['font'])) {
-                            $icon = $type;
-                        } else if (in_array($type, $formats['binary'])) {
-                            $icon = $type;
-                        } else if (in_array($type, $formats['document'])) {
-                            $icon = $type;
-                        } else if (in_array($type, $formats['image'])) {
-                            $icon = 'image';
-                        } else if (in_array(strtolower(strpos($name, '.') !== false ? substr($name, 0, strpos($name, '.')) : $name), $formats['source'])) {
-                            $icon = strtolower(strpos($name, '.') !== false ? substr($name, 0, strpos($name, '.')) : $name);
-                            $isEdit = true;
-                        } else if (isFormatUnknown($name)) {
-                            $icon = 'unknown';
-                            $isEdit = true;
-                        }
-
-                        if (strtolower($name) == 'error_log' || $isEdit)
-                            $edit[0] = '<a href="edit_text.php?dir=' . $dirEncode . '&name=' . $name . $pages['paramater_1'] . '">';
-                        else if (in_array($type, $formats['zip']))
-                            $edit[0] = '<a href="file_unzip.php?dir=' . $dirEncode . '&name=' . $name . $pages['paramater_1'] . '">';
-                        else
-                            $edit[0] = '<a href="file_rename.php?dir=' . $dirEncode . '&name=' . $name . $pages['paramater_1'] . '">';
-
-                        echo '<li class="file">
-                            <p>
-                                <input type="checkbox" name="entry[]" value="' . $name . '"/>
-                                ' . $edit[0] . '<img src="icon/mime/' . $icon . '.png"/>' . $edit[1] . '
-                                <a href="file.php?dir=' . $dirEncode . '&name=' . $name . $pages['paramater_1'] . '">' . $name . '</a>
-                            </p>
-                            <p>
-                                <span class="size">' . size(filesize($dir . '/' . $name)) . '</span>,
-                                <a href="file_chmod.php?dir=' . $dirEncode .'&name=' . $name . $pages['paramater_1'] . '" class="chmod">' . $perms . '</a>
-                            </p>
-                        </li>';
-                    }
-                }
-
-                echo '<li class="normal"><input type="checkbox" name="all" value="1" onClick="javascript:onCheckItem();"/> <strong class="form_checkbox_all">Chọn tất cả</strong></li>';
-
-                if ($configs['page_list'] > 0 && $pages['total'] > 1)
-                    echo '<li class="normal">' . page($pages['current'], $pages['total'], array(PAGE_URL_DEFAULT => 'index.php?dir=' . $dirEncode, PAGE_URL_START => 'index.php?dir=' . $dirEncode . '&page_list=')) . '</li>';
-            }
-
-            echo '</ul>';
-
-            if ($count > 0) {
-                echo '<div class="list">
-                    <select name="option">
-                        <option value="0">Sao chép</option>
-                        <option value="1">Di chuyển</option>
-                        <option value="2">Xóa</option>
-                        <option value="3">Nén zip</option>
-                        <option value="4">Chmod</option>
-                        <option value="5">Đổi tên</option>
-                    </select>
-                    <input type="submit" name="submit" value="Thực hiện"/>
-                </div>';
-            }
-
-            echo '</form>
-            <div class="title">Chức năng</div>
-            <ul class="list">
-                <li><img src="icon/create.png"/> <a href="create.php?dir=' . $dirEncode . $pages['paramater_1'] . '">Tạo mới</a></li>
-                <li><img src="icon/upload.png"/> <a href="upload.php?dir=' . $dirEncode . $pages['paramater_1'] . '">Tải lên tập tin</a></li>
-                <li><img src="icon/import.png"/> <a href="import.php?dir=' . $dirEncode . $pages['paramater_1'] . '">Nhập khẩu tập tin</a></li>
-            </ul>';
-        }
-
-        include_once 'footer.php';
-    } else {
-        goURL('login.php');
+if (Config::get('Gmanager', 'addressBar')) {
+    echo '<div class="edit"><form action="index.php?" method="get">
+	<div class="bar">';
+    if ($ia) {
+        echo '<input type="hidden" name="add_archive" value="' . htmlspecialchars($_GET['add_archive']) . '"/>
+		<input type="hidden" name="go" value="1"/>';
     }
+		echo '<input type="text" name="c" value="' . Registry::get('hCurrent') . '"/> <input type="submit" value="' . Language::get('go') . '"/>
+		</div></form></div>';
+}
 
-?>
+if ($idown = isset($_GET['down'])) {
+    $down = '&amp;up';
+    $mnem = '&#171;';
+} else {
+    $down = '&amp;down';
+    $mnem = '&#187;';
+}
+
+if (!$if) {
+    if (!$archive) {
+
+        $itype = '';
+
+        if (isset($_GET['chmod'])) {
+            $itype = 'chmod';
+            echo '<form action="change.php?c=' . Registry::get('rCurrent') . '&amp;go=1" method="post"><input type="checkbox" onclick="Gmanager.check(this.form,\'check[]\',this.checked)"/> <u>Chọn hết</u>';
+        }else{
+            $itype = '';
+            echo '<form action="change.php?c=' . Registry::get('rCurrent') . '&amp;go=1" method="post"><input type="checkbox" onclick="Gmanager.check(this.form,\'check[]\',this.checked)"/> <u>Chọn hết</u>';
+        }
+    } elseif ($archive != Archive::FORMAT_GZ) {
+        echo '<form action="change.php?c=' . Registry::get('rCurrent') . '&amp;go=1" method="post"><input type="checkbox" onclick="Gmanager.check(this.form,\'check[]\',this.checked)"/> <u>Chọn hết</u>';
+    }
+}
+
+if ($archive && $archive != Archive::FORMAT_GZ) {
+    $obj = new Archive;
+    $factory = $obj->setFormat($archive)->setFile(Registry::get('current'))->factory();
+    if ($if) {
+        echo $factory->lookFile($_GET['f']);
+    } else {
+        echo $factory->listArchive($idown);
+        $f = 1;
+    }
+} elseif ($archive == Archive::FORMAT_GZ) {
+    echo Gmanager::getInstance()->gz(Registry::get('current')) . '<div class="ch"><form action="change.php?c=' . Registry::get('rCurrent') . '&amp;go=1" method="post"><div><input type="submit" name="gz_extract" value="' . Language::get('extract_archive') . '"/></div></form></div>';
+    $if = true;
+} else {
+    echo Gmanager::getInstance()->look(Registry::get('current'), $itype, $idown);
+}
+
+if (Gmanager::getInstance()->file_exists(Registry::get('current')) || Registry::get('currentType') == 'link') {
+    if ($archive) {
+        $d = Helper_View::getRawurl(dirname(Registry::get('current')));
+        $found = '<div class="rb" align="right">
+		' . Language::get('create') . ' 
+		<a href="change.php?go=create_file&amp;c=' . $d . '">' . Language::get('file') . '</a>
+		/ <a href="change.php?go=create_dir&amp;c=' . $d . '">' . Language::get('dir') . '</a><br/>
+		</div><div class="rb" align="right">
+		<a href="change.php?go=upload&amp;c=' . $d . '">' . Language::get('upload') . '</a><br/>
+		</div><div class="rb" align="right">
+		<a href="change.php?go=mod&amp;c=' . $d . '">' . Language::get('mod') . '</a><br/>
+		</div>
+	';
+    } else {
+        $found = '
+		<form action="' . $_SERVER['PHP_SELF'] . '?' . htmlspecialchars($_SERVER['QUERY_STRING'], ENT_COMPAT, 'UTF-8') . '" method="post"><div>
+		<input name="limit" value="' . Registry::get('limit') . '" type="text" onkeypress="return Gmanager.number(event)" class="pinput"/>
+		<input type="submit" value="' . Language::get('limit') . '"/></div></form>
+		
+		<div class="rb" align="right">' . Language::get('create') . ' <a href="change.php?go=create_file&amp;c=' . Registry::get('rCurrent') . '">' . Language::get('file') . '</a> / <a href="change.php?go=create_dir&amp;c=' . Registry::get('rCurrent') . '">' . Language::get('dir') . '</a><br/></div>
+		<div class="rb" align="right">
+		<a href="change.php?go=upload&amp;c=' . Registry::get('rCurrent') . '">' . Language::get('upload') . '</a><br/></div>
+		<div class="rb" align="right">
+		<a href="change.php?go=mod&amp;c=' . Registry::get('rCurrent') . '">' . Language::get('mod') . '</a><br/>
+		</div>';
+    }
+} else {
+    $found = '<div class="red">' . Language::get('not_found') . '(' . Registry::get('hCurrent') . ')' . '<br/></div>';
+}
+
+
+$tm = '<div class="rb">' . round(microtime(true) - GMANAGER_START, 4) . ' / ' . Helper_View::formatSize(memory_get_peak_usage()) . '<br/></div>';
+
+if (!$if && !$f && !$ia) {
+    echo '<div class="ch">
+		<input onclick="return Gmanager.checkForm(document.forms[1],\'check[]\');" type="submit" name="full_chmod" value="' . Language::get('chmod') . '"/> 
+		<input onclick="return (Gmanager.checkForm(document.forms[1],\'check[]\') &amp;&amp; Gmanager.delNotify());" type="submit" name="full_del" value="' . Language::get('del') . '"/> <input onclick="return Gmanager.checkForm(document.forms[1],\'check[]\');" type="submit" name="full_rename" value="' . Language::get('change') . '"/> <input onclick="return Gmanager.checkForm(document.forms[1],\'check[]\');" type="submit" name="fname" value="' . Language::get('rename') . '"/> 
+		<input onclick="return Gmanager.checkForm(document.forms[1],\'check[]\');" type="submit" name="create_archive" value="' . Language::get('create_archive') . '"/>
+		</div></form>
+		' . $found . $tm . Registry::get('foot');
+} elseif ($f) {
+    echo '<div class="ch">
+	<input onclick="return Gmanager.checkForm(document.forms[1],\'check[]\');" type="submit" name="full_extract" value="' . Language::get('extract_file') . '"/> <input type="submit" name="mega_full_extract" value="' . Language::get('extract_archive') . '"/>';
+    if ($archive != Archive::FORMAT_RAR) {
+        echo '
+		<input type="submit" name="add_archive" value="' . Language::get('add_archive') . '"/>
+		<input onclick="return (Gmanager.checkForm(document.forms[1],\'check[]\') &amp;&amp; Gmanager.delNotify());" type="submit" name="del_archive" value="' . Language::get('del') . '"/>
+		';
+    }
+    echo '
+	      </div></form>
+		  ' . $found . $tm . Registry::get('foot');
+} elseif ($ia) {
+    echo '<div class="ch">
+	<input type="hidden" name="add_archive" value="' . rawurlencode($_GET['add_archive']) . '"/>
+	<input onclick="return Gmanager.checkForm(document.forms[1],\'check[]\');" type="submit" name="name" value="' . Language::get('add_archive') . '"/>
+	</div></form>
+	' . $found . $tm . Registry::get('foot');
+} else {
+    echo $found . $tm . Registry::get('foot');
+}
