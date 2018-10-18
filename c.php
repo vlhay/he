@@ -20,7 +20,7 @@ else
 {
 
 $url = $_GET['url'];
-$url =  str_replace('http://m.','',$url);
+$url =  preg_replace('/(http://m.|https://)/i','',$url);
 $url =  str_replace('http://','',$url);
 $url =  str_replace($url,'http://'.$url ,$url);
 $curl = curl_init();
