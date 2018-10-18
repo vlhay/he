@@ -7,7 +7,7 @@
         <title>MiBlog</title>
         <meta name="robots" content="index,follow">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    	<link type="text/css" rel="stylesheet" href="/css/admin-style.css?v=472256984">
+    	<link type="text/css" rel="stylesheet" href="http://cuocsong.viwap.com/css/admin-style.css?v=472256984">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
     <body>
