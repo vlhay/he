@@ -65,7 +65,7 @@ echo '
     Thể loại:<br />  
     <select name="category">  
 		      		<optgroup label="Giải trí">	
-				              		<option value="5">Ảnh Girl Xinh</option>
+				              		<option value="3">Lập Trình</option>
               				</optgroup>
 		    </select>  
     <br />
