@@ -1,4 +1,17 @@
-<?php
+ <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Cache-Control" content="no-cache"/>
+        <meta http-equiv="content-language" content="en"/>
+      	
+        <title>MiBlog</title>
+        <meta name="robots" content="index,follow">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    	<link type="text/css" rel="stylesheet" href="http://cuocsong.viwap.com/css/admin-style.css?v=472256984">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+	    <?php
 if (!isset($_GET['url']))
 {
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><form method="get">Url: <input name="url" type="text"><input type="submit" value="Leech" ></form>';
@@ -26,12 +39,12 @@ $title = trim($title[0]);
 $lay = curl_exec($curl);
 
 
-$lay = explode("<div itemprop='articleBody'>",$lay);
-$lay = explode("<i class='fa fa-tag fa-lg'></i>",$lay[1]);
+$lay = explode("<div class=\"entry-content\">",$lay);
+$lay = explode("<div style=\"overflow: hidden\">",$lay[1]);
 
 
 $lay = trim($lay[0]);
-$lay = strip_tags($lay,'<img>');
+$lay = strip_tags($lay,'<img><p><strong><style>');
 $thum = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is',"<option>$2</option>",$lay);
 $lay =  str_replace('GaiXinhXinh.Com','CuocSong.ViWap.Com' ,$lay);
 $lay =  str_replace('<p>','[p]' ,$lay);
@@ -46,7 +59,7 @@ echo '
 <h3>Viết bài</h3>
 <div class="box">
   
-        <form action="http://cuocsong.viwap.com/admin/leech" method="post">
+        <form action="http://cuocsong.viwap.com/xoa/leech" method="post">
     Tiêu đề:<br />  	
     <input name="title" value="'.$title.'"><br />
     Thể loại:<br />  
