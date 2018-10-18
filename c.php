@@ -39,8 +39,8 @@ $title = trim($title[0]);
 $lay = curl_exec($curl);
 
 
-$lay = explode("<div class=\"entry-content\">",$lay);
-$lay = explode("<div style=\"overflow: hidden\">",$lay[1]);
+$lay = explode('<div class="entry-content">',$lay);
+$lay = explode('<div style="overflow: hidden">',$lay[1]);
 
 
 $lay = trim($lay[0]);
