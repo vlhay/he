@@ -1,3 +1,17 @@
+ <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Cache-Control" content="no-cache"/>
+        <meta http-equiv="content-language" content="en"/>
+      	
+        <title>MiBlog</title>
+        <meta name="robots" content="index,follow">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    	<link type="text/css" rel="stylesheet" href="/css/admin-style.css?v=472256984">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+
 <?php
 if (!isset($_GET['url']))
 {
