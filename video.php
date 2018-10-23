@@ -51,12 +51,14 @@ function getXvideo($url)
 if (isset($_GET['url']) && strstr($_GET['url'], 'xvideos.com') != null) {
     $url = $_GET['url'];
     //echo getXvideo($url);
+    //<link href="http://vjs.zencdn.net/5.11.9/video-js.css" rel="stylesheet">
+//<script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+//<script src="http://vjs.zencdn.net/5.11.9/video.js"></script>
+
 }
 ?>
 
 
-<link href="http://vjs.zencdn.net/5.11.9/video-js.css" rel="stylesheet">
-<script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
 <video id="my-video" class="video-js" controls preload="auto" style="max-width:100%; height:auto"
 poster="<?php
 echo ($urlJPG);
@@ -64,4 +66,4 @@ echo ($urlJPG);
 <source src="<?php
 echo json_decode(getXvideo($url))->mp4high;
 ?>" type='video/mp4'>
-</video> <script src="http://vjs.zencdn.net/5.11.9/video.js"></script>
+</video> 
