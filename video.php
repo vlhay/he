@@ -53,9 +53,11 @@ if (isset($_GET['url']) && strstr($_GET['url'], 'xvideos.com') != null) {
     //echo getXvideo($url);
 }
 ?>
+
+
 <link href="http://vjs.zencdn.net/5.11.9/video-js.css" rel="stylesheet">
 <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
-<video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
+<video id="my-video" class="video-js" controls preload="auto" style="max-width:100%; height:auto"
 poster="<?php
 echo ($urlJPG);
 ?>" data-setup="{}">
