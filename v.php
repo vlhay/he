@@ -54,7 +54,7 @@ if (isset($_GET['url']) && strstr($_GET['url'], 'xvideos.com') != null) {
   
 }
 ?>
-<script src="http://animehay.tv/themes/AH_1.2/all/js/jwplayer.js?v=1.9.7"></script>
+<script src="http://cuocsong.herokuapp.com/jwplayer.js"></script>
 <script>jwplayer.key="MBvrieqNdmVL4jV0x6LPJ0wKB/Nbz2Qq/lqm3g==";</script>
 
 <div id='player'></div>
