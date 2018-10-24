@@ -69,8 +69,8 @@ width: '100%',
 aspectratio: '16:9',
 skin: 'five',
 logo: {
-file: "http://cudemvn.wap.sh/images/picture/apple.png",
-link: 'Cuocsong.viwap.com',
+file: "https://i.imgur.com/MmI5H39.png",
+link: 'http://Cuocsong.viwap.com',
 }
 });
 </script>
