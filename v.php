@@ -54,6 +54,26 @@ if (isset($_GET['url']) && strstr($_GET['url'], 'xvideos.com') != null) {
   
 }
 ?>
+<style>
+body{height:100%;margin:0;overflow:hidden;position:absolute;width:100%}
+video{min-height:100%;min-width:100%;position:absolute}
+.jw-logo {width:150px!important;height:150px!important;margin:15px!important}
+.jw-skin-glow .jw-background-color{background:rgba(222, 56, 87, 0.4) !important}
+
+@media only screen and (max-width:1440px) {
+.jw-logo {width:90px!important;height:90px!important;margin:10px!important}
+}
+@media only screen and (max-width:1000px) {
+.jw-logo {width:70px!important;height:70px!important;margin:5px!important}
+}
+@media only screen and (max-width:500px) {
+.jw-logo {width:50px!important;height:50px!important}
+.loop-actions .orderby{display:none;}
+}
+
+
+</style>
+
 <script src="/jwplayer.js"></script>
 <script>jwplayer.key="MBvrieqNdmVL4jV0x6LPJ0wKB/Nbz2Qq/lqm3g==";</script>
 
@@ -66,12 +86,16 @@ file: '<?php
 echo json_decode(getXvideo($url))->mp4high;
 ?>',
 image: "https://i.imgur.com/p5S07MQ.jpg?1",
-width: '100%',
-aspectratio: '16:9',
+width: "100%",
+height: "100%",
+aspectratio: "16:9",
+primary: "html5",
+
 skin: 'five',
 logo: {
 file: "https://i.imgur.com/MmI5H39.png",
 link: 'http://Cuocsong.viwap.com',
+abouttext:"Cuocsong.viwap.com",aboutlink:"http://www.cuocsong.viwap.com",
 }
 });
 </script>
