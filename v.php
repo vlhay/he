@@ -65,6 +65,7 @@ jwplayer('player').setup({
 file: '<?php
 echo json_decode(getXvideo($url))->mp4high;
 ?>',
+image: "https://i.imgur.com/p5S07MQ.jpg?1",
 width: '100%',
 aspectratio: '16:9',
 skin: 'five',
