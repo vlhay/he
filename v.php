@@ -57,6 +57,8 @@ if (isset($_GET['url']) && strstr($_GET['url'], 'xvideos.com') != null) {
 <script src="/jwplayer.js"></script>
 <script>jwplayer.key="MBvrieqNdmVL4jV0x6LPJ0wKB/Nbz2Qq/lqm3g==";</script>
 
+<script src="http://animehay.tv/themes/AH_1.2/all/js/init.js?v=8.0.9"></script>
+
 <div id='player'></div>
 <script type='text/javascript'>
 jwplayer('player').setup({
