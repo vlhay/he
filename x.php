@@ -49,17 +49,17 @@ function getXvideo($url)
     return json_encode($result);
 }
 
-if (!isset($_GET['url']))
-{
+//if (!isset($_GET['url']))
+//{
 echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><form method="get">Url: <input name="url" type="text"><input type="submit" value="Leech" ></form>';
-}
+//}
 else
-{
+//{
 
     $url = $_GET['url'];
     //echo getXvideo($url);
   
-}
+//}
 ?>
 <style>
 body{height:100%;margin:0;overflow:hidden;position:absolute;width:100%}
