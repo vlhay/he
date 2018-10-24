@@ -56,7 +56,6 @@ echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><form 
 else
 {
 
-{
     $url = $_GET['url'];
     //echo getXvideo($url);
   
