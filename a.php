@@ -47,10 +47,9 @@ $lay = explode("<i class='fa fa-tag fa-lg'></i>",$lay[1]);
 $lay = trim($lay[0]);
 $lay = strip_tags($lay,'<img><iframe>');
 $thum = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is',"<option>$2</option>",$lay);
-$lay =  str_replace('GaiXinhXinh.Com','CuocSong.ViWap.Com' ,$lay);
-$lay =  str_replace('<p>','[p]' ,$lay);
-$lay =  str_replace('</p>','[/p]' ,$lay);
-$lay = trim($lay);
+	$lay = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is',"[img]$2[/img]",$lay);
+$lay =  str_ireplace('GaiXinhXinh.Com','Top18.ViWap.Com' ,$lay);
+$lay = trim($lay, <img>);
 $lay =  str_replace('Tải ảnh','' ,$lay);
 $lay = trim($lay);
 curl_close($curl);
@@ -60,18 +59,18 @@ echo '
 <h3>Viết bài</h3>
 <div class="box">
   
-        <form action="http://cuocsong.viwap.com/xoa/leech" method="post">
+        <form action="http://top18.viwap.com/manager/post" method="post">
     Tiêu đề:<br />  	
-    <input name="title" value="'.$title.'"><br />
+    <input name="ten" value="'.$title.'"><br />
     Thể loại:<br />  
     <select name="category">  
 		      		<optgroup label="Giải trí">	
-				              		<option value="5">Ảnh Girl Xinh</option>
+				              		<option value="2">Ảnh Girl Xinh</option>
               				</optgroup>
 		    </select>  
     <br />
     Thumbnail<br />  
-     <select name="thumbnail">  
+     <select name="thumb">  
 		   <optgroup>	
 	'.$thum.'
               		 </optgroup>			
@@ -80,8 +79,8 @@ echo '
     Nội dung:<br />  
     <textarea name="content" id="content" rows="25">'.$lay.'</textarea>
     <br />
-    <input type="checkbox" name="allowComment" value="1" checked> Cho phép bình luận
-      <div class="frm-buttons"><button>Đăng bài</button></div>
+    <input type="checkbox" name="comment" value="1" checked> Cho phép bình luận
+     <button type="submit" class="btn btn-primary btn-block">Đăng bài</button></div>
     </form>  
 </div> '; 
 
