@@ -66,7 +66,7 @@ echo '
     Thể loại:<br />  
     <select name="category">  
 		      		<optgroup label="Giải trí">	
-				              		<option value="2">Ảnh Girl Xinh</option>
+				              		<option value="3">Truyện 18+</option>
               				</optgroup>
 		    </select>  
     <br />
