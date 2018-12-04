@@ -62,7 +62,7 @@ echo '
   
         <form action="http://top18.viwap.com/manager/leech" method="post">
     Tiêu đề:<br />  	
-    <input name="ten" value="'.$title.'"><br />
+    <input name="ten" value="Truyện sex '.$title.'"><br />
     Thể loại:<br />  
     <select name="category">  
 		      		<optgroup label="Giải trí">	
