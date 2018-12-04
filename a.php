@@ -81,8 +81,11 @@ echo '
     <textarea name="content" id="content" rows="25">'.$lay.'</textarea>
     <br />
     <input type="checkbox" name="comment" value="1" checked> Cho phép bình luận
-     <button type="submit" class="btn btn-primary btn-block">Đăng bài</button></div>
+     <button type="submit" class="btn btn-primary btn-block"id="eow">Đăng bài</button></div>
     </form>  
+    <script language="javascript"> 
+document.getElementById("eow").click(); 
+</script>
 </div> '; 
 
 
