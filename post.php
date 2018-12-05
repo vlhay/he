@@ -69,7 +69,7 @@ $thumb = explode('</div></div><!-- Detail Images END -->',$thumb[1]);
 
 $thumb = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is',"<option value='$2'>$2</option>",$thumb);
 $thumb = trim($thumb[0]);
-$thumb = strip_tags($thumb,'<img>,<option>');
+$thumb = strip_tags($thumb,'<img>');
 
 $url1= "'$url";
 
@@ -153,12 +153,12 @@ echo '
     Thumbnail<br />  
      <select name="thumb">  
 		   <optgroup>	
-	'.$thum.'
+	'.$thumb.'
               		 </optgroup>			
 		    </select>  
     <br />
     Nội dung:<br />  
-    <textarea name="content" id="content" rows="25">[b] Truyện có '.$lay.' Chap[/b][br]'.$thumb.'';
+    <textarea name="content" id="content" rows="25">[b] Truyện có '.$lay.' Chap[/b]';
 if($kt == 1)
 {
 $cuoi = '<div class="container reading-pagination" id="reading-pagination-bottom">';
@@ -176,7 +176,8 @@ $bai = explode('<div class="container" id="content_chap">',$bai);
 $bai = explode($cuoi,$bai[1]);
 $bai = trim($bai[0]);
 $bai = strip_tags($bai,'<p>,<b>,<i>,<u>,<strong>,<img>');
-$bai = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is','[img]$1[/img]',$bai);
+$bai = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is','[img]$2[/img]
+',$bai);
 $bai = preg_replace('/<p>(Chap|Chương|Phần)(.*)<\/p>/i', '<p><b>$1$2</b></p>', $bai);
 $bai = preg_replace('/(truyenvip.pro|truyenvip)/i', 'Top18.Viwap.Com', $bai);
 echo '  [br][/center][b]Chapter '.$i.'[/b][/center]'.$bai.'  [img]http://i.imgur.com/mq26MT9.jpg[/img]';
