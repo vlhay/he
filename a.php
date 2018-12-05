@@ -61,7 +61,7 @@ echo '
 <h3>Viết bài</h3>
 <div class="box">
   
-        <form action="http://top18.viwap.com/manager/leech" method="post">
+        <form action="http://top18.viwap.com/namon" method="post">
     Tiêu đề:<br />  	
     <input name="ten" value="'.$title.'"><br />
     Thể loại:<br />  
