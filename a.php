@@ -47,7 +47,8 @@ $lay = explode("<i class='fa fa-tag fa-lg'></i>",$lay[1]);
 $lay = trim($lay[0]);
 $lay = strip_tags($lay,'<img><iframe>');
 $thum = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is',"<option>$2</option>",$lay);
-	$lay = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is',"[img]$2[/img]",$lay);
+	$lay = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is',"[img]$2[/img]
+	",$lay);
 $lay =  str_ireplace('GaiXinhXinh.Com','Top18.ViWap.Com' ,$lay);
 $lay = strip_tags($lay,'<img>,<br>');
 $lay = trim($lay);
