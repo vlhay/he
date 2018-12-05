@@ -33,7 +33,7 @@ curl_setopt($c, CURLOPT_URL, 'http://toi18.viwap.com/post');
 
 curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($c, CURLOPT_POST, 1);
-curl_setopt($c, CURLOPT_POSTFIELDS,array('title'=>$title[1],'category'=>'2','content'=>$content.$nd,'tags'=>$tags,'thumb'=>$thumb,'comment'=>'1' Của 12 Cung Hoàng Đạo','submit'=>'Đăng bài'));
+curl_setopt($c, CURLOPT_POSTFIELDS,array('title'=>$title[1],'category'=>'2','content'=>$content.$nd,'tags'=>$tags,'thumb'=>$thumb,'comment'=>'1','submit'=>'Đăng bài'));
 $gui=curl_exec($c);
 curl_close($c);
 if (preg_match('#Đăng bài viết thành công#is', $gui)) {
