@@ -1,52 +1,208 @@
+ <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Cache-Control" content="no-cache"/>
+        <meta http-equiv="content-language" content="en"/>
+      	
+        <title>MiBlog</title>
+        <meta name="robots" content="index,follow">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    	<link type="text/css" rel="stylesheet" href="http://cuocsong.viwap.com/css/admin-style.css?v=472256984">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+    <body>
+
 <?php
-header("Content-type: text/javascript");
-/* ID chuyên mục */
-$idcm = 55058;
-/* Mục hiển thị tại trang chủ */
-$idtc = 0;
-/* Thumb mặc định cho tool */
-$thumb = 'http://i.imgur.com/tz0DweX.jpg';
-$binhtrongbk = file_get_contents("http://www.chiemtinh.com.vn/tu-vi-12-cung-hoang-dao");
-$last = file_get_contents("cachechiemtinh.txt");
-$list = explode('<a href="http://www.chiemtinh.com.vn', $binhtrongbk);
-for ($i=111;$i>52;$i--) {
-$link = explode('" title="', $list[$i]);
-if (strpos($last, $link[0])<3) {
-$i = 52;
-$nd = file_get_contents("http://www.chiemtinh.com.vn$link[0]");
-//$tags = file_get_contents("$link[0]");
-preg_match('#<title>(.*?)</title>#is', $nd, $title);
-//$title[1] = str_replace('- Truyện sex','',$title[1]);
-$title[1] = html_entity_decode($title[1], ENT_QUOTES, 'UTF-8');
-$nd = explode('<div class="article_content">',$nd);
-$nd = explode('<!--End .article_content-->',$nd[1]);
-$nd = strip_tags($nd[0], '<p><strong><i><img>');
-//$nd = str_replace('www.chiemtinh.com.vn','Truyensv.Ovn.Mobi',$nd);
-
-$nd = html_entity_decode($nd, ENT_QUOTES, 'UTF-8');
-//var_dump($nd);
-//exit();
-$content ="<h2 class=\"titleh2\"><p>$title[1], xem bói $title[1]: vận hạn, sự nghiệp, tình yêu, vận may của 12 cung hoàng đạo Bạch Dương, Kim Ngưu, Song Tử, Cự Giải, Sư Tử, Xử Nữ, Thiên Bình, Thần Nông, Nhân Mã, Ma Kết, Bảo Bình, Song Ngư.</p><p>Gieo quẻ $title[1] cho 12 cung hoàng đạo Bạch Dương, Kim Ngưu, Song Tử, Cự Giải, Sư Tử, Xử Nữ, Thiên Bình, Thần Nông, Nhân Mã, Ma Kết, Bảo Bình, Song Ngư.</p><p>Hãy cùng http://truyensv.ovn.mobi khám phá xem <a href=\"http://truyensv.ovn.mobi/box-tu-vi-hang-ngay-55058.html\"><i>tử vi hàng ngày</i></a> của 12 chòm sao $title[1] sẽ như thế nào nhé!</p></h2>";
-$tags="tu vi,tu vi hang ngay,tu vi 12 cung hoang dao";
-$c=curl_init();
-curl_setopt($c, CURLOPT_URL, 'http://toi18.viwap.com/post');
-
-curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($c, CURLOPT_POST, 1);
-curl_setopt($c, CURLOPT_POSTFIELDS,array('title'=>$title[1],'category'=>'2','content'=>$content.$nd,'tags'=>$tags,'thumb'=>$thumb,'comment'=>'1','submit'=>'Đăng bài'));
-$gui=curl_exec($c);
-curl_close($c);
-if (preg_match('#Đăng bài viết thành công#is', $gui)) {
-$last = substr($last, 11, 5000);
-$f = fopen('cachechiemtinh.txt', 'w+');
-fwrite($f, 'binhtrongbk'.$link[0].$last);
-fclose($f);
-echo "document.write('A');";
-} else {
-echo "document.write('B');";
+if (!isset($_GET['url']))
+{
+echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><form method="get">Url: <input name="url" type="text"><input type="submit" value="Leech" ></form>';
 }
+else
+{
+$url = $_GET['url'];
+$url =  str_replace('http://m.','',$url);
+$url =  str_replace('http://','',$url);
+$url =  str_replace($url,'http://'.$url ,$url);
+$curl = curl_init();
+curl_setopt ($curl, CURLOPT_URL, $url);
+curl_setopt ($curl, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Linux; U; Android 4.1.2; vi; SAMSUNG Build/JZO54K) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 UCBrowser/9.7.5.418 U3/0.8.0 Mobile Safari/533.1');
+$vll = $url;
+$vll =  str_replace('http://','',$vll);
+$vll =  str_replace('hentailx.com/','',$vll);
+$vll =  str_replace('-1000.html','',$vll);
+
+
+$dow = curl_exec($curl);
+$dow = explode('Thể loại:',$dow);
+$dow = explode('Theo dõi:',$dow[1]);
+$dow =  str_replace('</a>',',' ,$dow);
+$dow = trim($dow[0]);
+$dow = strip_tags($dow,'');
+$dow = trim($dow);
+
+$key = curl_exec($curl);
+$key = explode('<meta name="Keywords" content="',$key);
+$key = explode('<meta name="copyright"',$key[1]);
+$key = preg_replace('#<img src="(.*?)" alt="(.*?)" />#is',"<option value='$1'>$1</option>",$key);
+$key = str_replace('>','',$key);
+$key = str_replace('/','',$key);
+$key = str_replace('"','',$key);
+$key = trim($key[0]);
+$key = strip_tags($key,'');
+
+$des = curl_exec($curl);
+$des = explode('<meta name="description" content="',$des);
+$des = explode('<link rel="canonical"',$des[1]);
+$des = preg_replace('#<img src="(.*?)" alt="(.*?)" />#is',"<option value='$1'>$1</option>",$des);
+$des = str_replace('"/>','',$des);
+$des = str_ireplace('gaixinh9.com','truyenhay.botay.in',$des);
+$des = str_replace('<p>','',$des);
+$des = trim($des[0]);
+$des = strip_tags($des,'<img>,<br>,<b>,<option>,<u>,<strong>');
+
+
+
+$thumb = curl_exec($curl);
+$thumb = explode('<div class="thumbnail row list-group-item">',$thumb);
+$thumb = explode('</div></div><!-- Detail Images END -->',$thumb[1]);
+$thumb = preg_replace('#<img width="(.*?)" height="(.*?)" onerror="(.*?)" src="(.*?)" class="(.*?)" alt="(.*?)" itemprop="(.*?)" />#is',"<option value='$4'>$4</option>",$thumb);
+$thumb = preg_replace("#<img src='(.*?)' alt='(.*?)'/>#is",'<option value="$1">$1</option>',$thumb);
+$thumb = preg_replace('#<img src="(.*?)" alt="(.*?)">#is',"[img]$1[/img]",$thumb);
+$thumb = preg_replace('#<img class="(.*?)" src="(.*?)" width="(.*?)" height="(.*?)" />#is',"<option value='$2'>$2</option>",$thumb);
+$thumb = str_replace('</div>','',$thumb);
+$thumb = str_replace('</p>','',$thumb);
+$thumb = str_replace('<p>','',$thumb);
+$thumb = trim($thumb[0]);
+$thumb = strip_tags($thumb,'<img>,<option>');
+
+$url1= "'$url";
+
+$title = curl_exec($curl);
+$lay = explode('update <a href="/doc-truyen/'.$vll.'-chapter-',$title);
+$lay = explode('.html" class="chap-link">Chapter',$lay[1]);
+$lay = trim($lay[0]);
+if (!$lay){
+$lay = explode('<!--Chapter List label-->',$title);
+$lay = explode('<span class="sr-only">(current)</span>',$lay[1]);
+$lay = strip_tags($lay[0]);
+$lay = trim($lay);
+$lay = substr($lay, -1 , 1 );
 }
+if (!$lay){$lay = 1;}
+$title = explode('<title>',$title);
+$title = explode('</title>',$title[1]);
+$title = trim($title[0]);
+$title = explode('-',$title);
+$title = trim($title[0]);
+
+
+$nd = curl_exec($curl);
+$nd = explode("<div class='post-body entry-content' id='post_body'>",$nd);
+$nd = explode("<div style=' clear:both;'></div>",$nd[1]);
+$nd= preg_replace('#<img src="(.*?)" alt="(.*?)" />#is',"[img]$1[/img]",$nd);
+$nd= preg_replace('#<img border="(.*?)" src="(.*?)" />#is',"[img]$2[/img]",$nd);
+$nd= preg_replace('#<img class="(.*?)" src="(.*?)" width="(.*?)" height="(.*?)" />#is',"[img]$2[/img]",$nd);
+$nd = preg_replace('#m.vietgiaitri.com/tag/(.*?)/#is',"truyenhay.botay.in/tag/$1",$nd);
+$nd = str_replace('</div>','',$nd);
+$nd = str_replace('</p>','',$nd);
+$nd = str_replace('<p>','',$nd);
+$nd = trim($nd[0]);
+$nd = strip_tags($nd,'<iframe>,<img>,<br>,<b>,<i>,<u>,<strong>');
+curl_close($curl);
+
+$pt = $_GET['pt'];
+$pt = explode('.',$pt);
+$bd = $pt[0];
+$kt = $pt[1];
+if ($bd > $lay || $kt > $lay || $bd > $kt )  {
+echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>Truyện '.$title.' có '.$lay.' thôi mà !!';
+}
+else{
+if (($kt && !$bd) || ($bd <= 1 && $kt > 0 )) {
+$bd = 1;
+$thong = 'Leech từ đầu đến trang '.$kt;
+}
+elseif (!$bd && !$kt ) {
+$kt = $lay;
+$bd = 1;
+$thong = 'Đã leech tất cả '.$lay.' trang' ;
+}
+elseif (!$kt && $bd) {
+$kt = $lay;
+$thong = "Đã leech từ trang " .$bd." đến hết";
+}
+else {
+$thong = 'Đã leech từ trang '.$bd.' đến trang '.$kt; 
+}
+echo '
+
+	<b><u>'.$thong.'</u></b>';
+
+
+
+echo '
+<h3>Viết bài</h3>
+<div class="box">
+  
+        <form action="http://top18.viwap.com/namon" method="post">
+    Tiêu đề:<br />  	
+    <input name="ten" value="'.$title.'"><br />
+    Thể loại:<br />  
+    <select name="category">  
+		      		<optgroup label="Giải trí">	
+				              		<option value="2">Ảnh Girl Xinh</option>
+              				</optgroup>
+		    </select>  
+    <br />
+    Thumbnail<br />  
+     <select name="thumb">  
+		   <optgroup>	
+	'.$thum.'
+              		 </optgroup>			
+		    </select>  
+    <br />
+    Nội dung:<br />  
+    <textarea name="content" id="content" rows="25">[b] Truyện có '.$lay.' Chap[/b][br]'.$thumb.'';
+if($kt == 1)
+{
+$cuoi = '<div class="container reading-pagination" id="reading-pagination-bottom">';
+}
+else {
+$cuoi = '<div class="container reading-pagination" id="reading-pagination-bottom">';
+}
+$bv = curl_init();
+for ($i= 1; $i <= $kt ; $i++) { 
+curl_setopt ($bv, CURLOPT_URL, 'http://hentailx.com/doc-truyen/'.$vll.'-chapter-'.$i.'.html');
+curl_setopt ($bv, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($bv, CURLOPT_USERAGENT, 'Mozilla/5.0 (Linux; U; Android 4.1.2; vi; SAMSUNG Build/JZO54K) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 UCBrowser/9.7.5.418 U3/0.8.0 Mobile Safari/533.1');
+$bai = curl_exec($bv);
+$bai = explode('<div class="container" id="content_chap">',$bai);
+$bai = explode($cuoi,$bai[1]);
+$bai = trim($bai[0]);
+$bai = strip_tags($bai,'<p>,<b>,<i>,<u>,<strong>,<img>');
+$bai = preg_replace("#<img src='(.*?)' alt='(.*?)'/>#is",'[img]$1[/img]',$bai);
+$bai = preg_replace('/<p>(Chap|Chương|Phần)(.*)<\/p>/i', '<p><b>$1$2</b></p>', $bai);
+$bai = preg_replace('/(truyenvip.pro|truyenvip)/i', $_SESSION['domain'], $bai);
+echo '  [br][center][b]Chapter '.$i.'[/b][/center]'.$bai.'  [img]http://i.imgur.com/mq26MT9.jpg[/img]';
+}
+curl_close($bv);
+
+
+
+$t= strip_tags($bai,'');
+
+$f= substr( $t, 0, 500);
+echo '</textarea></textarea>
+    <br />
+    <input type="checkbox" name="comment" value="1" checked> Cho phép bình luận
+     <button type="submit" class="btn btn-primary btn-block"id="eow">Đăng bài</button></div>
+    </form>  
+    
+</div> '; 
+
+
+
 }
 
-/* Powered by binhtrongbk */
 ?>
