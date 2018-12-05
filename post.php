@@ -66,13 +66,8 @@ $des = strip_tags($des,'<img>,<br>,<b>,<option>,<u>,<strong>');
 $thumb = curl_exec($curl);
 $thumb = explode('<div class="thumbnail row list-group-item">',$thumb);
 $thumb = explode('</div></div><!-- Detail Images END -->',$thumb[1]);
-$thumb = preg_replace('#<img width="(.*?)" height="(.*?)" onerror="(.*?)" src="(.*?)" class="(.*?)" alt="(.*?)" itemprop="(.*?)" />#is',"<option value='$4'>$4</option>",$thumb);
-$thumb = preg_replace("#<img src='(.*?)' alt='(.*?)'/>#is",'<option value="$1">$1</option>',$thumb);
-$thumb = preg_replace('#<img src="(.*?)" alt="(.*?)">#is',"[img]$1[/img]",$thumb);
-$thumb = preg_replace('#<img class="(.*?)" src="(.*?)" width="(.*?)" height="(.*?)" />#is',"<option value='$2'>$2</option>",$thumb);
-$thumb = str_replace('</div>','',$thumb);
-$thumb = str_replace('</p>','',$thumb);
-$thumb = str_replace('<p>','',$thumb);
+
+$thumb = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is',"<option value='$2'>$2</option>",$thumb);
 $thumb = trim($thumb[0]);
 $thumb = strip_tags($thumb,'<img>,<option>');
 
@@ -181,10 +176,10 @@ $bai = explode('<div class="container" id="content_chap">',$bai);
 $bai = explode($cuoi,$bai[1]);
 $bai = trim($bai[0]);
 $bai = strip_tags($bai,'<p>,<b>,<i>,<u>,<strong>,<img>');
-$bai = preg_replace("#<img src='(.*?)' alt='(.*?)'/>#is",'[img]$1[/img]',$bai);
+$bai = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is','[img]$1[/img]',$bai);
 $bai = preg_replace('/<p>(Chap|Chương|Phần)(.*)<\/p>/i', '<p><b>$1$2</b></p>', $bai);
-$bai = preg_replace('/(truyenvip.pro|truyenvip)/i', $_SESSION['domain'], $bai);
-echo '  [br][center][b]Chapter '.$i.'[/b][/center]'.$bai.'  [img]http://i.imgur.com/mq26MT9.jpg[/img]';
+$bai = preg_replace('/(truyenvip.pro|truyenvip)/i', 'Top18.Viwap.Com', $bai);
+echo '  [br][/center][b]Chapter '.$i.'[/b][/center]'.$bai.'  [img]http://i.imgur.com/mq26MT9.jpg[/img]';
 }
 curl_close($bv);
 
