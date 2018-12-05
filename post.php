@@ -30,7 +30,7 @@ curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Linux; U; Android 4.1.2; vi;
 $vll = $url;
 $vll =  str_replace('http://','',$vll);
 $vll =  str_replace('hentailx.com/','',$vll);
-$vll =  str_replace('-1000.html','',$vll);
+$vll =  str_replace('-1.html','',$vll);
 
 
 $dow = curl_exec($curl);
