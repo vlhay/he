@@ -66,10 +66,10 @@ $des = strip_tags($des,'<img>,<br>,<b>,<option>,<u>,<strong>');
 $thumb = curl_exec($curl);
 $thumb = explode('<div class="thumbnail row list-group-item">',$thumb);
 $thumb = explode('</div></div><!-- Detail Images END -->',$thumb[1]);
-
+$thumb = strip_tags($thumb,'<img>');
 $thumb = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is',"<option value='$2'>$2</option>",$thumb);
 $thumb = trim($thumb[0]);
-$thumb = strip_tags($thumb,'<img>');
+
 
 $url1= "'$url";
 
