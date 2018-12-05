@@ -180,7 +180,7 @@ $bai = preg_replace('#<img(.*?)src="(.*?)"(.*?)>#is','[img]$2[/img]
 ',$bai);
 $bai = preg_replace('/<p>(Chap|Chương|Phần)(.*)<\/p>/i', '<p><b>$1$2</b></p>', $bai);
 $bai = preg_replace('/(truyenvip.pro|truyenvip)/i', 'Top18.Viwap.Com', $bai);
-echo '  [br][/center][b]Chapter '.$i.'[/b][/center]'.$bai.'  [img]http://i.imgur.com/mq26MT9.jpg[/img]';
+echo '  [br][b]Chapter '.$i.'[/b]'.$bai.'  ';
 }
 curl_close($bv);
 
