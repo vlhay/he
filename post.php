@@ -148,7 +148,7 @@ echo '
   
         <form action="http://top18.viwap.com/namon" method="post">
     Tiêu đề:<br />  	
-    <input name="ten" value="Truyện Hentai'.$title.' '.$lay.' Chap"><br />
+    <input name="ten" value="Truyện Hentai '.$title.' '.$lay.' Chap"><br />
     Thể loại:<br />  
     <select name="category">  
 		      		<optgroup label="Giải trí">	
