@@ -14,7 +14,7 @@
 
 <?php
 	    
-include 'function.php';
+include 'func.php';
 	    
 if (!isset($_GET['url']))
 {
