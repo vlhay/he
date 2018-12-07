@@ -152,7 +152,7 @@ echo '
     Thể loại:<br />  
     <select name="category">  
 		      		<optgroup label="Giải trí">	
-				              		<option value="2">Ảnh Girl Xinh</option>
+				              		<option value="4">Truyện Hentai</option>
               				</optgroup>
 		    </select>  
     <br />
