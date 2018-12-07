@@ -164,7 +164,7 @@ echo '
 		    </select>  
     <br />
     Nội dung:<br />  
-    <textarea name="content" id="content" rows="25">[b] Truyện có '.$lay.' '.$thumb.' Chap[/b]';
+    <textarea name="content" id="content" rows="25">[b] Truyện có '.$lay.' Chap[/b]';
 if($kt == 1)
 {
 $cuoi = '<div class="container reading-pagination" id="reading-pagination-bottom">';
