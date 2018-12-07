@@ -14,19 +14,7 @@
 
 <?php
 	    
- function md_keys_google($value){
-    mb_internal_encoding('UTF-8');
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_USERAGENT, 'NokiaN73-2/3.0-630.0.2 Series60/3.0 Profile/MIDP-2.0 Configuration/CLDC-1.1');
-    curl_setopt($ch, CURLOPT_URL, 'http://www.google.com/search?ie=UTF-8&oe=utf8&q='.$value.'&btnG=Search');
-    $nd = curl_exec($ch);
-    curl_close($ch);
-    preg_match('#<div style="font-size:110%">Related:</div><div style="padding:4px 8px 0">(.*?)</div></div></div><div id="navbar" style="margin:4px 0;text-align:center">#is', $nd, $ab);$info = @$ab[1];
-    $info = str_replace('<a',',<a',$info);
-    $info =  strip_tags($info);
-    return html_entity_decode(substr($info,1,20000));
-    }
+include 'function.php';
 	    
 if (!isset($_GET['url']))
 {
