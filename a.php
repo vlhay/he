@@ -14,7 +14,6 @@
 
 <?php
 	    
-include 'func.php';
 	    
 if (!isset($_GET['url']))
 {
@@ -68,10 +67,7 @@ echo '
     Tiêu đề:<br />  	
     md_keys_google($value)
     <input name="ten" value="'.$title.'"><br />
-        tag:<br />  	
-    
-    <input name="tag" value="'.md_keys_google($title).'"><br />
-    Thể loại:<br />  
+
     <select name="category">  
 		      		<optgroup label="Giải trí">	
 				              		<option value="2">Ảnh Girl Xinh</option>
@@ -92,10 +88,10 @@ echo '
      <button type="submit" class="btn btn-primary btn-block"id="eow">Đăng bài</button></div>
     </form>  
    
+
+<script language="javascript"> document.getElementById("eow").click(); </script>
 </div> '; 
 
-
-// <script language="javascript"> document.getElementById("eow").click(); </script>
 }
 
 ?>
